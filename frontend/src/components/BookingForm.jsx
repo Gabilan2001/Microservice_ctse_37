@@ -72,6 +72,8 @@
 
 // export default BookingForm;
 
+// This is an enhanced version of the BookingForm component with a multi-step form, better UI/UX, and error handling. It allows users to select a user, choose an event, and confirm their booking with a summary before submission.
+
 import React, { useState, useEffect } from "react";
 import { createBooking } from "../services/bookingService";
 import { getEvents } from "../services/eventService";
