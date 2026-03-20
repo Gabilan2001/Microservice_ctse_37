@@ -15,7 +15,7 @@ app.use(express.json())
 
 app.use("/api/reviews", reviewRoutes)
 
-const PORT = process.env.PORT || 5004
+const PORT = process.env.PORT || 3004
 
 app.listen(PORT, () => {
   console.log(`Customer Review Service running on port ${PORT}`)
