@@ -34,3 +34,4 @@ router.put("/:id", protect, updateEvent)
 router.delete("/:id", protect, deleteEvent)
 
 export default router
+//# sourceMappingURL=eventRoutes.js.map
