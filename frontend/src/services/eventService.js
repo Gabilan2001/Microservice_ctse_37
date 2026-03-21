@@ -1,18 +1,27 @@
 import axios from "axios";
+import { getAuthHeaders } from "./authStorage";
 
 const API_URL =
-  process.env.REACT_APP_EVENT_API_URL || "http://localhost:5001/api/events";
+  process.env.REACT_APP_EVENT_API_URL || "http://localhost:3002/api/events";
 
 export const getEvents = async () => {
   return await axios.get(API_URL);
 };
 
 export const createEvent = async (eventData) => {
-  return await axios.post(API_URL, eventData);
+  return await axios.post(API_URL, eventData, {
+    headers: {
+      ...getAuthHeaders(),
+    },
+  });
 };
 
 export const deleteEvent = async (id) => {
-  return await axios.delete(`${API_URL}/${id}`);
+  return await axios.delete(`${API_URL}/${id}`, {
+    headers: {
+      ...getAuthHeaders(),
+    },
+  });
 };
 
 export const uploadEventImage = async (file, folder = "ctse-events") => {
@@ -22,6 +31,7 @@ export const uploadEventImage = async (file, folder = "ctse-events") => {
 
   return await axios.post(`${API_URL}/upload`, formData, {
     headers: {
+      ...getAuthHeaders(),
       "Content-Type": "multipart/form-data",
     },
   });
@@ -32,5 +42,13 @@ export const getBannerImage = async () => {
 };
 
 export const updateBannerImage = async (imageUrl) => {
-  return await axios.put(`${API_URL}/banner`, { imageUrl });
+  return await axios.put(
+    `${API_URL}/banner`,
+    { imageUrl },
+    {
+      headers: {
+        ...getAuthHeaders(),
+      },
+    }
+  );
 };
