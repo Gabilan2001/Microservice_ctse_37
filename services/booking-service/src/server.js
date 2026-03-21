@@ -15,7 +15,7 @@ app.use(express.json())
 
 app.use("/api/bookings", bookingRoutes)
 
-const PORT = process.env.PORT || 5002
+const PORT = process.env.PORT || 3003
 
 app.listen(PORT, () => {
   console.log(`Booking Service running on port ${PORT}`)

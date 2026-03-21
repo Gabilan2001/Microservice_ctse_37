@@ -10,24 +10,25 @@ getBookings,
 getBookedSeatsByEvent,
 cancelBooking
 } = require("../controllers/bookingController")
+const { protect } = require("../middlewares/authMiddleware")
 const {
 uploadBannerImage,
 getBanner,
 updateBanner
 } = require("../controllers/bannerController")
 
-router.post("/",createBooking)
+router.post("/", protect, createBooking)
 
-router.get("/",getBookings)
+router.get("/", protect, getBookings)
 
 router.post("/banner/upload", upload.single("image"), uploadBannerImage)
 
 router.get("/banner", getBanner)
 
-router.put("/banner", updateBanner)
+router.put("/banner", protect, updateBanner)
 
 router.get("/event/:eventId/seats",getBookedSeatsByEvent)
 
-router.delete("/:id",cancelBooking)
+router.delete("/:id", protect, cancelBooking)
 
 module.exports = router

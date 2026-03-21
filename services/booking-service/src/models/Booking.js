@@ -7,6 +7,21 @@ type:String,
 required:true
 },
 
+userEmail:{
+type:String,
+default:null
+},
+
+userName:{
+type:String,
+default:null
+},
+
+userRole:{
+type:String,
+default:null
+},
+
 eventId:{
 type:String,
 required:true

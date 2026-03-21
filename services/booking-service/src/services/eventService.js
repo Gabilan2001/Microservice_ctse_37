@@ -2,17 +2,33 @@ const axios = require("axios")
 
 const EVENT_SERVICE_URL = process.env.EVENT_SERVICE_URL || "http://event-service:5001"
 
-const getEventById = async (eventId) => {
+const getEventById = async (eventId, authorizationHeader) => {
 
-  const response = await axios.get(`${EVENT_SERVICE_URL}/api/events/${eventId}`)
+  const requestConfig = authorizationHeader
+    ? {
+        headers: {
+          Authorization: authorizationHeader
+        }
+      }
+    : undefined
+
+  const response = await axios.get(`${EVENT_SERVICE_URL}/api/events/${eventId}`, requestConfig)
 
   return response.data
 
 }
 
-const updateEventById = async (eventId, payload) => {
+const updateEventById = async (eventId, payload, authorizationHeader) => {
 
-  const response = await axios.put(`${EVENT_SERVICE_URL}/api/events/${eventId}`, payload)
+  const requestConfig = authorizationHeader
+    ? {
+        headers: {
+          Authorization: authorizationHeader
+        }
+      }
+    : undefined
+
+  const response = await axios.put(`${EVENT_SERVICE_URL}/api/events/${eventId}`, payload, requestConfig)
 
   return response.data
 
