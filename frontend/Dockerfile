@@ -1,11 +1,10 @@
-# Build static assets; runtime is nginx (production — not react-scripts start).
+# Multi-stage: Node builds static files; final image is nginx:alpine only (small runtime).
 FROM node:20-alpine AS build
 
 WORKDIR /app
 
 COPY package*.json ./
-# Prefer `npm ci` once lockfile matches the npm in this image (node:20-alpine).
-RUN npm install
+RUN npm install --no-audit --no-fund
 
 COPY . .
 
