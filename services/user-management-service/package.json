@@ -9,8 +9,9 @@
     "test": "jest --runInBand --detectOpenHandles"
   },
   "jest": {
-  "testEnvironment": "node"
-},
+    "testEnvironment": "node",
+    "testTimeout": 120000
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mfarthas-al/event-authentication-service.git"

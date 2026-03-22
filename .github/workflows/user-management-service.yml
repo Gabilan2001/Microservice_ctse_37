@@ -1,6 +1,7 @@
 name: User Management Service CI-CD
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -47,7 +48,10 @@ jobs:
     name: Publish User Management Service Image
     runs-on: ubuntu-latest
     needs: ci
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Push to Docker Hub only from main (or manual run). develop runs tests only.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main')
 
     steps:
       - name: Checkout code

@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 const app = require("../src/app");
 const User = require("../src/models/User");
 
+// CI downloads MongoDB binary on first run (~100MB+); default 5s hook timeout is too low
+jest.setTimeout(120000);
+
 let mongoServer;
 let userAccessToken;
 let userRefreshToken;
@@ -22,13 +25,17 @@ beforeAll(async () => {
   const mongoUri = mongoServer.getUri();
 
   await mongoose.connect(mongoUri);
-});
+}, 120000);
 
 afterAll(async () => {
-  await mongoose.connection.dropDatabase();
-  await mongoose.connection.close();
-  await mongoServer.stop();
-});
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+  }
+  if (mongoServer) {
+    await mongoServer.stop();
+  }
+}, 120000);
 
 afterEach(async () => {
   // keep DB between tests only if needed; otherwise clean each time
