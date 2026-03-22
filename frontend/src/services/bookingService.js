@@ -1,8 +1,8 @@
 import axios from "axios";
+import { bookingApiUrl } from "../config/apiConfig";
 import { getAuthHeaders } from "./authStorage";
 
-const API_URL =
-  process.env.REACT_APP_BOOKING_API_URL || "http://localhost:3003/api/bookings";
+const API_URL = bookingApiUrl;
 
 export const createBooking = async (bookingData) => {
   return await axios.post(API_URL, bookingData, {

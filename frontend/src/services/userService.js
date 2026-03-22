@@ -1,8 +1,8 @@
 import axios from "axios";
+import { authApiUrl } from "../config/apiConfig";
 import { getAuthHeaders } from "./authStorage";
 
-const API_URL =
-  process.env.REACT_APP_AUTH_API_URL || "http://localhost:3001/api/auth";
+const API_URL = authApiUrl;
 
 const normalizeAuthResponse = (responseData) => {
   const payload = responseData?.data || responseData;

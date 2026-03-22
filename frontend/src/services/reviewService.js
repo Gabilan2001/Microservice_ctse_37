@@ -1,8 +1,8 @@
 import axios from "axios";
+import { reviewApiUrl } from "../config/apiConfig";
 import { getAuthHeaders } from "./authStorage";
 
-const API_URL =
-  process.env.REACT_APP_REVIEW_API_URL || "http://localhost:3004/api/reviews";
+const API_URL = reviewApiUrl;
 
 export const getReviews = async (eventId) => {
   return await axios.get(API_URL, { params: { eventId } });

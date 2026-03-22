@@ -1,8 +1,8 @@
 import axios from "axios";
+import { eventApiUrl } from "../config/apiConfig";
 import { getAuthHeaders } from "./authStorage";
 
-const API_URL =
-  process.env.REACT_APP_EVENT_API_URL || "http://localhost:3002/api/events";
+const API_URL = eventApiUrl;
 
 export const getEvents = async () => {
   return await axios.get(API_URL);

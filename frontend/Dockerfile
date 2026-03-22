@@ -8,16 +8,9 @@ RUN npm install --no-audit --no-fund
 
 COPY . .
 
-# Browser calls these URLs; for docker-compose use host-published ports (override in cloud).
-ARG REACT_APP_EVENT_API_URL=http://localhost:5001/api/events
-ARG REACT_APP_BOOKING_API_URL=http://localhost:5002/api/bookings
-ARG REACT_APP_AUTH_API_URL=http://localhost:5003/api/auth
-ARG REACT_APP_REVIEW_API_URL=http://localhost:5004/api/reviews
-
-ENV REACT_APP_EVENT_API_URL=$REACT_APP_EVENT_API_URL
-ENV REACT_APP_BOOKING_API_URL=$REACT_APP_BOOKING_API_URL
-ENV REACT_APP_AUTH_API_URL=$REACT_APP_AUTH_API_URL
-ENV REACT_APP_REVIEW_API_URL=$REACT_APP_REVIEW_API_URL
+# Single entry point (nginx api-gateway). Unset at build time to use REACT_APP_* per-service URLs instead.
+ARG REACT_APP_API_GATEWAY_URL=http://localhost:8080
+ENV REACT_APP_API_GATEWAY_URL=$REACT_APP_API_GATEWAY_URL
 
 RUN npm run build
 
