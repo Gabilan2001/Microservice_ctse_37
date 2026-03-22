@@ -248,7 +248,6 @@ function EventReviews({ events, currentUser }) {
     }
   };
 
-  const selectedEvent = events.find(e => e._id === selectedEventId);
   const averageRating = getAverageRating();
   const distribution = getRatingDistribution();
   const filteredReviews = getFilteredAndSortedReviews();
