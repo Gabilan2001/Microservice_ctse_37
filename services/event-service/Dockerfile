@@ -1,22 +1,12 @@
-FROM node:20-alpine AS deps
+FROM node:20-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
-
-
-FROM node:20-alpine AS runner
-
-WORKDIR /app
-
-ENV NODE_ENV=production
-ENV PORT=3002
-
-COPY --from=deps /app/node_modules ./node_modules
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
-EXPOSE 3002
+EXPOSE 4000
 
-CMD ["node", "src/server.js"]
+CMD ["node", "server.js"]

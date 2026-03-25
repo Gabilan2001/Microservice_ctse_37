@@ -1,10 +1,4 @@
-node_modules
-npm-debug.log
-.env
-.git
-.github
-coverage
-tests
-README.md
-Dockerfile
-docker-compose.yml
+node_modules;
+npm - debug.log.env.git.gitignore;
+Dockerfile;
+docker - compose.yml;
