@@ -13,10 +13,10 @@ connectDB()
 app.use(cors())
 app.use(express.json())
 
-// Log every request
-app.use((req, res, next) => {
-  console.log('booking service working correctly')
-  next()
+
+
+app.get("/health", (req, res) => {
+  res.json({ success: true, message: "Booking service is running!" })
 })
 
 
