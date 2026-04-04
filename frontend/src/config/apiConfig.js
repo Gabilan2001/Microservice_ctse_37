@@ -3,7 +3,7 @@ const trimTrailingSlash = (value) => (value || "").replace(/\/$/, "");
 const gateway = trimTrailingSlash(process.env.REACT_APP_API_GATEWAY_URL);
 
 /**
- * When REACT_APP_API_GATEWAY_URL is set (e.g. http://localhost:8080), all API
+ * When REACT_APP_API_GATEWAY_URL is set (e.g. http://3.214.194.159:8081), all API
  * calls go through the gateway. Otherwise use per-service URLs (direct to each port).
  */
 export const eventApiUrl =
