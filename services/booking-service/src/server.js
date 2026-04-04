@@ -22,7 +22,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/bookings", bookingRoutes)
 
-const PORT = process.env.PORT || 3003
+const PORT = process.env.PORT || 8081
 
 app.listen(PORT, () => {
   console.log(`Booking Service running on port ${PORT}`)

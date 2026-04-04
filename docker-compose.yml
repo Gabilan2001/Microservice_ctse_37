@@ -83,7 +83,7 @@ services:
     build:
       context: ./frontend
       args:
-        REACT_APP_API_GATEWAY_URL: http://localhost:8081
+        REACT_APP_API_GATEWAY_URL: http://3.214.194.159:8081
     container_name: frontend
     depends_on:
       - api-gateway

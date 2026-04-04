@@ -9,7 +9,7 @@ RUN npm install --no-audit --no-fund
 COPY . .
 
 # Single entry point (nginx api-gateway). Unset at build time to use REACT_APP_* per-service URLs instead.
-ARG REACT_APP_API_GATEWAY_URL=http://localhost:8080
+ARG REACT_APP_API_GATEWAY_URL=http://3.214.194.159:8081
 ENV REACT_APP_API_GATEWAY_URL=$REACT_APP_API_GATEWAY_URL
 
 RUN npm run build
