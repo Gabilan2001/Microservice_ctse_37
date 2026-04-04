@@ -1,24 +1,29 @@
-import { validateAccessToken } from "../services/authService.js"
+import {
+  extractAccessToken,
+  verifyUserWithAuthService
+} from "../services/authService.js"
 
 export const protect = async (req, res, next) => {
-  const authorizationHeader = req.headers.authorization
-
-  if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
-    return res.status(403).json({
-      success: false,
-      message: "Access token is missing"
-    })
-  }
-
   try {
-    const user = await validateAccessToken(authorizationHeader)
+    const token = extractAccessToken(req)
 
-    if (!user?.id) {
+    if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Invalid token"
+        message: "Unauthorized - token missing"
       })
     }
+
+    const verification = await verifyUserWithAuthService(token)
+
+    if (!verification.isVerified) {
+      return res.status(verification.statusCode || 401).json({
+        success: false,
+        message: verification.message || "Unauthorized"
+      })
+    }
+
+    const user = verification.user || {}
 
     req.user = {
       id: user.id,
@@ -29,16 +34,11 @@ export const protect = async (req, res, next) => {
 
     next()
   } catch (error) {
-    if (!error.response) {
-      return res.status(503).json({
-        success: false,
-        message: "Authentication service unavailable"
-      })
-    }
+    console.error("Auth middleware error:", error)
 
-    return res.status(401).json({
+    return res.status(500).json({
       success: false,
-      message: "Invalid or expired token"
+      message: "Internal server error"
     })
   }
 }

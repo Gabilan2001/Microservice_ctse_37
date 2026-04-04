@@ -1,24 +1,29 @@
-const { validateAccessToken } = require("../services/authService")
+const {
+  extractAccessToken,
+  verifyUserWithAuthService
+} = require("../services/authService")
 
 const protect = async (req, res, next) => {
-  const authorizationHeader = req.headers.authorization
-
-  if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
-    return res.status(403).json({
-      success: false,
-      message: "Access token is missing"
-    })
-  }
-
   try {
-    const user = await validateAccessToken(authorizationHeader)
+    const token = extractAccessToken(req)
 
-    if (!user?.id) {
+    if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Invalid token"
+        message: "Unauthorized - token missing"
       })
     }
+
+    const verification = await verifyUserWithAuthService(token)
+
+    if (!verification.isVerified) {
+      return res.status(verification.statusCode || 401).json({
+        success: false,
+        message: verification.message || "Unauthorized"
+      })
+    }
+
+    const user = verification.user || {}
 
     req.user = {
       id: user.id,
@@ -29,43 +34,33 @@ const protect = async (req, res, next) => {
 
     next()
   } catch (error) {
-    if (!error.response) {
-      return res.status(503).json({
-        success: false,
-        message: "Authentication service unavailable"
-      })
-    }
+    console.error("Auth middleware error:", error)
 
-    return res.status(401).json({
+    return res.status(500).json({
       success: false,
-      message: "Invalid or expired token"
+      message: "Internal server error"
     })
   }
 }
 
 const optionalProtect = async (req, res, next) => {
-  const authorizationHeader = req.headers.authorization
+  const token = extractAccessToken(req)
 
-  if (!authorizationHeader) {
+  if (!token) {
     return next()
   }
 
-  if (!authorizationHeader.startsWith("Bearer ")) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid authorization format"
-    })
-  }
-
   try {
-    const user = await validateAccessToken(authorizationHeader)
+    const verification = await verifyUserWithAuthService(token)
 
-    if (!user?.id) {
-      return res.status(401).json({
+    if (!verification.isVerified) {
+      return res.status(verification.statusCode || 401).json({
         success: false,
-        message: "Invalid token"
+        message: verification.message || "Unauthorized"
       })
     }
+
+    const user = verification.user || {}
 
     req.user = {
       id: user.id,
@@ -76,16 +71,11 @@ const optionalProtect = async (req, res, next) => {
 
     return next()
   } catch (error) {
-    if (!error.response) {
-      return res.status(503).json({
-        success: false,
-        message: "Authentication service unavailable"
-      })
-    }
+    console.error("Optional auth middleware error:", error)
 
-    return res.status(401).json({
+    return res.status(500).json({
       success: false,
-      message: "Invalid or expired token"
+      message: "Internal server error"
     })
   }
 }
