@@ -1,6 +1,6 @@
 const axios = require("axios")
 
-const BOOKING_SERVICE_URL = process.env.BOOKING_SERVICE_URL || "http://booking-service:3003"
+const BOOKING_SERVICE_URL = process.env.BOOKING_SERVICE_URL || "http://localhost:3003"
 
 const bookingClient = axios.create({
   baseURL: BOOKING_SERVICE_URL,

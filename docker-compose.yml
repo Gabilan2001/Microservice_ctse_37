@@ -1,5 +1,5 @@
 # APIs use MONGO_URI / MONGODB_URI from each service's .env (e.g. Atlas) — same DB as Postman/local npm.
-# Browser → api-gateway:8080 → microservices (only gateway + frontend need public ports for typical use).
+# Browser -> api-gateway:8081 -> microservices (only gateway + frontend need public ports for typical use).
 # For a fully local MongoDB instead, use: docker compose -f docker-compose.yml -f docker-compose.local-mongo.yml up
 services:
   api-gateway:
@@ -50,10 +50,12 @@ services:
     build:
       context: ./services/user-management-service
     container_name: user-management-service
-    env_file:
-      - ./services/user-management-service/.env
     environment:
       PORT: "3001"
+      JWT_SECRET: ${JWT_SECRET:-change-me-access}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-change-me-refresh}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-15m}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-7d}
     ports:
       - "3001:3001"
     restart: unless-stopped
@@ -81,7 +83,7 @@ services:
     build:
       context: ./frontend
       args:
-        REACT_APP_API_GATEWAY_URL: http://localhost:8080
+        REACT_APP_API_GATEWAY_URL: http://localhost:8081
     container_name: frontend
     depends_on:
       - api-gateway

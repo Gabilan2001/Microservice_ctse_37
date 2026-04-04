@@ -1,6 +1,6 @@
 const axios = require("axios")
 
-const EVENT_SERVICE_URL = process.env.EVENT_SERVICE_URL || "http://event-service:3002"
+const EVENT_SERVICE_URL = process.env.EVENT_SERVICE_URL || "http://localhost:3002"
 
 const eventClient = axios.create({
   baseURL: EVENT_SERVICE_URL,
