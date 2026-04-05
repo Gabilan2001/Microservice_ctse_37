@@ -8,7 +8,8 @@ const {
 createBooking,
 getBookings,
 getBookedSeatsByEvent,
-cancelBooking
+cancelBooking,
+updateBookingStatus
 } = require("../controllers/bookingController")
 const { protect } = require("../middlewares/authMiddleware")
 const {
@@ -28,6 +29,8 @@ router.get("/banner", getBanner)
 router.put("/banner", protect, updateBanner)
 
 router.get("/event/:eventId/seats",getBookedSeatsByEvent)
+
+router.patch("/:id/status", protect, updateBookingStatus)
 
 router.delete("/:id", protect, cancelBooking)
 

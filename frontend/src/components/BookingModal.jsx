@@ -55,7 +55,7 @@ function BookingModal({ event, currentUser, onClose, onBooked }) {
         eventId: event._id,
         seatNumbers: selectedSeats.sort((a, b) => a - b)
       });
-      alert("Booking confirmed!");
+      alert("Booking submitted. It stays pending until an admin confirms it.");
       onBooked();
 
     } catch (error) {

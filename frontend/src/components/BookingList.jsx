@@ -53,7 +53,18 @@
 
 import React, { useState } from "react";
 import { deleteBooking } from "../services/bookingService";
-import "./BookingList.css"; // Create this CSS file for styles
+import "./BookingList.css";
+
+function normalizeBookingStatus(status) {
+  if (status == null || status === "") return "confirmed";
+  if (status === "BOOKED") return "confirmed";
+  return String(status).toLowerCase();
+}
+
+function formatStatusLabel(status) {
+  const s = normalizeBookingStatus(status);
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 function BookingList({ bookings, refreshBookings }) {
   const [selectedBooking, setSelectedBooking] = useState(null);
@@ -74,26 +85,34 @@ function BookingList({ bookings, refreshBookings }) {
   };
 
   const getStatusBadgeClass = (status) => {
-    switch(status) {
-      case 'confirmed': return 'status-badge confirmed';
-      case 'pending': return 'status-badge pending';
-      case 'cancelled': return 'status-badge cancelled';
-      default: return 'status-badge';
+    switch (normalizeBookingStatus(status)) {
+      case "confirmed":
+        return "status-badge confirmed";
+      case "pending":
+        return "status-badge pending";
+      case "cancelled":
+        return "status-badge cancelled";
+      default:
+        return "status-badge";
     }
   };
 
   const getStatusIcon = (status) => {
-    switch(status) {
-      case 'confirmed': return '✅';
-      case 'pending': return '⏳';
-      case 'cancelled': return '❌';
-      default: return '📅';
+    switch (normalizeBookingStatus(status)) {
+      case "confirmed":
+        return "✓";
+      case "pending":
+        return "…";
+      case "cancelled":
+        return "✕";
+      default:
+        return "•";
     }
   };
 
-  const filteredBookings = bookings.filter(booking => {
-    // Filter by status
-    if (filterStatus !== 'all' && booking.status !== filterStatus) {
+  const filteredBookings = bookings.filter((booking) => {
+    const ns = normalizeBookingStatus(booking.status);
+    if (filterStatus !== "all" && ns !== filterStatus) {
       return false;
     }
     
@@ -112,9 +131,9 @@ function BookingList({ bookings, refreshBookings }) {
 
   const stats = {
     total: bookings.length,
-    confirmed: bookings.filter(b => b.status === 'confirmed').length,
-    pending: bookings.filter(b => b.status === 'pending').length,
-    cancelled: bookings.filter(b => b.status === 'cancelled').length
+    confirmed: bookings.filter((b) => normalizeBookingStatus(b.status) === "confirmed").length,
+    pending: bookings.filter((b) => normalizeBookingStatus(b.status) === "pending").length,
+    cancelled: bookings.filter((b) => normalizeBookingStatus(b.status) === "cancelled").length,
   };
 
   if (bookings.length === 0) {
@@ -226,7 +245,7 @@ function BookingList({ bookings, refreshBookings }) {
           </thead>
           <tbody>
             {filteredBookings.map((booking) => (
-              <tr key={booking._id} className={`booking-row ${booking.status}`}>
+              <tr key={booking._id} className={`booking-row ${normalizeBookingStatus(booking.status)}`}>
                 <td>
                   <div className="user-info">
                     <div className="user-avatar">
@@ -268,14 +287,14 @@ function BookingList({ bookings, refreshBookings }) {
                 <td>
                   <span className={getStatusBadgeClass(booking.status)}>
                     <span className="status-icon">{getStatusIcon(booking.status)}</span>
-                    {booking.status}
+                    {formatStatusLabel(booking.status)}
                   </span>
                 </td>
                 <td>
                   <button
                     className="action-btn cancel"
                     onClick={() => confirmDelete(booking)}
-                    disabled={booking.status === 'cancelled'}
+                    disabled={normalizeBookingStatus(booking.status) === "cancelled"}
                   >
                     <span className="btn-icon">✕</span>
                     Cancel
@@ -313,7 +332,7 @@ function BookingList({ bookings, refreshBookings }) {
                 <div className="detail-row">
                   <span>Current Status:</span>
                   <span className={getStatusBadgeClass(selectedBooking.status)}>
-                    {selectedBooking.status}
+                    {formatStatusLabel(selectedBooking.status)}
                   </span>
                 </div>
               </div>

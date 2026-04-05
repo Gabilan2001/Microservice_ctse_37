@@ -7,6 +7,7 @@ import {
   uploadEventImage,
 } from "../services/eventService";
 import {
+  confirmBooking,
   deleteBooking,
   getBannerImage,
   getBookings,
@@ -157,9 +158,22 @@ function AdminPage({
       return;
     }
 
-    await deleteBooking(id);
-    fetchBookings();
-    fetchEvents();
+    try {
+      await deleteBooking(id);
+      fetchBookings();
+      fetchEvents();
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to cancel booking");
+    }
+  };
+
+  const handleConfirmBooking = async (id) => {
+    try {
+      await confirmBooking(id);
+      await fetchBookings();
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to confirm booking");
+    }
   };
 
   const handleDeleteReview = async (id) => {
@@ -195,8 +209,14 @@ function AdminPage({
 
   const findUser = (userId) => (Array.isArray(users) ? users.find((user) => user._id === userId) : null);
   const findEvent = (eventId) => (Array.isArray(events) ? events.find((event) => event._id === eventId) : null);
+  const normalizeBookingStatus = (status) => {
+    if (status == null || status === "") return "confirmed";
+    if (status === "BOOKED") return "confirmed";
+    return String(status).toLowerCase();
+  };
+
   const activeBookings = Array.isArray(bookings)
-    ? bookings.filter((booking) => booking.status !== "cancelled").length
+    ? bookings.filter((booking) => normalizeBookingStatus(booking.status) !== "cancelled").length
     : 0;
 
   const filteredEvents = Array.isArray(events) ? events.filter((event) =>
@@ -398,13 +418,14 @@ function AdminPage({
                 <th>Seats</th>
                 <th>Seat Numbers</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredBookings.slice(0, 5).map((booking) => {
+              {filteredBookings.map((booking) => {
                 const user = findUser(booking.userId);
                 const event = findEvent(booking.eventId);
+                const bookingStatus = normalizeBookingStatus(booking.status);
 
                 return (
                   <tr key={booking._id}>
@@ -427,14 +448,30 @@ function AdminPage({
                       <small>{booking.seatNumbers?.join(", ") || "-"}</small>
                     </td>
                     <td>
-                      <span className={`status-badge ${booking.status}`}>
-                        {booking.status}
+                      <span className={`status-badge ${bookingStatus}`}>
+                        {bookingStatus.charAt(0).toUpperCase() + bookingStatus.slice(1)}
                       </span>
                     </td>
                     <td>
-                      <button className="delete-btn small" onClick={() => handleCancelBooking(booking._id)}>
-                        Cancel
-                      </button>
+                      <div className="admin-booking-actions">
+                        {bookingStatus === "pending" ? (
+                          <button
+                            type="button"
+                            className="submit-btn small"
+                            onClick={() => handleConfirmBooking(booking._id)}
+                          >
+                            Confirm
+                          </button>
+                        ) : null}
+                        <button
+                          type="button"
+                          className="delete-btn small"
+                          disabled={bookingStatus === "cancelled"}
+                          onClick={() => handleCancelBooking(booking._id)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );

@@ -407,6 +407,18 @@ span.nav-pill.active {
   font-size: 0.8rem;
 }
 
+.submit-btn.small {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
+.admin-booking-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
 .cancel-btn {
   border: 1px solid var(--border);
   background: var(--bg-elevated);
