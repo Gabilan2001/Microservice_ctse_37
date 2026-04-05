@@ -1,55 +1,29 @@
-// import React from "react";
-
-// function EventCard({ event, onBook, fallbackImage }) {
-
-//   const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
-//     year: "numeric",
-//     month: "long",
-//     day: "numeric",
-//   });
-
-//   return (
-//     <div className="event-card">
-
-//       <img className="event-card-image" src={event.imageUrl || fallbackImage} alt={event.title} />
-
-//       <div className="event-meta-row">
-//         <span className="event-date-pill">{formattedDate}</span>
-//         <span className={`event-seat-pill ${event.availableSeats === 0 ? "sold" : "open"}`}>
-//           {event.availableSeats === 0 ? "Sold Out" : `${event.availableSeats} Seats`}
-//         </span>
-//       </div>
-
-//       <h3 className="event-title">{event.title}</h3>
-
-//       <p className="event-description">{event.description}</p>
-
-//       <div className="event-details">
-//         <span>{event.location}</span>
-//         <span>{event.totalSeats} total seats</span>
-//       </div>
-
-//       <button
-//         className="book-btn"
-//         onClick={onBook}
-//         disabled={event.availableSeats === 0}
-//       >
-//         {event.availableSeats === 0 ? "Sold Out" : "Book Ticket"}
-//       </button>
-
-//     </div>
-//   );
-// }
-
-// export default EventCard;
 import React, { useState } from "react";
-import "./EventCard.css"; // Create this CSS file for styles
+import {
+  IconAlert,
+  IconBolt,
+  IconCalendar,
+  IconClock,
+  IconMapPin,
+  IconSeat,
+  IconStatus,
+  IconTicket,
+  IconX,
+} from "./EventCardIcons";
+import "./EventCard.css";
 
 function EventCard({ event, onBook, fallbackImage }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
+  const eventDate = new Date(event.date);
+  const now = new Date();
+  const isPastEvent = eventDate < now;
+  const isSoldOut = event.availableSeats === 0;
+  const isAlmostFull = !isSoldOut && event.availableSeats <= event.totalSeats * 0.2;
+  const canBook = !isSoldOut && !isPastEvent;
+
+  const formattedDate = eventDate.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -58,142 +32,135 @@ function EventCard({ event, onBook, fallbackImage }) {
   });
 
   const getTimeRemaining = () => {
-    const eventDate = new Date(event.date);
-    const now = new Date();
     const diffTime = eventDate - now;
-    
+
     if (diffTime < 0) return "Event ended";
-    
+
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays > 30) return `${Math.ceil(diffDays / 30)} months left`;
     if (diffDays > 7) return `${Math.ceil(diffDays / 7)} weeks left`;
     if (diffDays > 1) return `${diffDays} days left`;
     if (diffDays === 1) return "Tomorrow";
-    
+
     const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
     if (diffHours > 0) return `${diffHours} hours left`;
-    
+
     return "Today";
   };
 
   const getSeatPercentage = () => {
+    if (!event.totalSeats) return 0;
     return ((event.totalSeats - event.availableSeats) / event.totalSeats) * 100;
   };
 
-  const isSoldOut = event.availableSeats === 0;
-  const isAlmostFull = event.availableSeats <= event.totalSeats * 0.2;
   const timeRemaining = getTimeRemaining();
 
   return (
-    <div className={`event-card ${isSoldOut ? 'sold-out' : ''} ${isAlmostFull ? 'almost-full' : ''}`}>
-      {/* Image Container */}
+    <div
+      className={`event-card ${isSoldOut ? "sold-out" : ""} ${isAlmostFull ? "almost-full" : ""} ${
+        isPastEvent ? "past-event" : ""
+      }`}
+    >
       <div className="event-card-image-container">
         {!imageLoaded && !imageError && (
           <div className="image-skeleton">
-            <div className="skeleton-loader"></div>
+            <div className="skeleton-loader" />
           </div>
         )}
-        
-        <img 
-          className={`event-card-image ${imageLoaded ? 'loaded' : ''}`}
-          src={imageError ? fallbackImage : (event.imageUrl || fallbackImage)} 
+
+        <img
+          className={`event-card-image ${imageLoaded ? "loaded" : ""}`}
+          src={imageError ? fallbackImage : event.imageUrl || fallbackImage}
           alt={event.title}
           onLoad={() => setImageLoaded(true)}
           onError={() => setImageError(true)}
         />
-        
-        {/* Overlay Badges */}
+
         <div className="image-overlay">
           {isSoldOut && (
             <div className="overlay-badge sold-out">
-              <span className="badge-icon">❌</span>
-              Sold Out
+              <IconX className="event-card-icon event-card-icon--on-dark" />
+              Sold out
             </div>
           )}
           {isAlmostFull && !isSoldOut && (
             <div className="overlay-badge almost-full">
-              <span className="badge-icon">🔥</span>
-              Almost Full
+              <IconBolt className="event-card-icon event-card-icon--on-dark" />
+              Almost full
             </div>
           )}
         </div>
-
-        {/* Favorite Button */}
-        <button className="favorite-btn">
-          <span className="heart-icon">♡</span>
-        </button>
       </div>
 
-      {/* Date and Status Row */}
       <div className="event-meta-row">
         <div className="event-date-pill">
-          <span className="meta-icon">📅</span>
+          <IconCalendar className="event-card-icon event-card-icon--muted" />
           <span>{formattedDate}</span>
         </div>
-        
+
         <div className={`event-seat-pill ${isSoldOut ? "sold" : isAlmostFull ? "limited" : "open"}`}>
-          <span className="meta-icon">
-            {isSoldOut ? "❌" : isAlmostFull ? "⚠️" : "🎫"}
-          </span>
+          {isSoldOut ? (
+            <IconX className="event-card-icon" />
+          ) : isAlmostFull ? (
+            <IconAlert className="event-card-icon" />
+          ) : (
+            <IconTicket className="event-card-icon" />
+          )}
           <span>
-            {isSoldOut 
-              ? "Sold Out" 
-              : isAlmostFull 
-                ? `Only ${event.availableSeats} left` 
-                : `${event.availableSeats} Seats`}
+            {isSoldOut
+              ? "Sold out"
+              : isAlmostFull
+                ? `${event.availableSeats} left`
+                : `${event.availableSeats} seats`}
           </span>
         </div>
       </div>
 
-      {/* Time Remaining Indicator */}
       {!isSoldOut && (
-        <div className="time-remaining">
-          <span className="time-icon">⏰</span>
+        <div className={`time-remaining ${isPastEvent ? "time-remaining--ended" : ""}`}>
+          <IconClock className="event-card-icon event-card-icon--muted" />
           <span className="time-text">{timeRemaining}</span>
         </div>
       )}
 
-      {/* Event Title */}
       <h3 className="event-title">{event.title}</h3>
 
-      {/* Event Description */}
       <p className="event-description">{event.description}</p>
 
-      {/* Progress Bar */}
-      {!isSoldOut && (
+      {!isSoldOut && !isPastEvent && (
         <div className="seat-progress">
           <div className="progress-bar">
-            <div 
-              className="progress-fill"
-              style={{ width: `${getSeatPercentage()}%` }}
-            ></div>
+            <div className="progress-fill" style={{ width: `${getSeatPercentage()}%` }} />
           </div>
-          <span className="progress-text">
-            {Math.round(getSeatPercentage())}% booked
-          </span>
+          <span className="progress-text">{Math.round(getSeatPercentage())}% booked</span>
         </div>
       )}
 
-      {/* Event Details */}
       <div className="event-details-grid">
         <div className="detail-item">
-          <span className="detail-icon">📍</span>
+          <span className="detail-icon-wrap" aria-hidden>
+            <IconMapPin className="event-card-icon event-card-icon--muted" />
+          </span>
           <div className="detail-content">
             <span className="detail-label">Location</span>
             <span className="detail-value">{event.location}</span>
           </div>
         </div>
-        
+
         <div className="detail-item">
-          <span className="detail-icon">🎫</span>
+          <span className="detail-icon-wrap" aria-hidden>
+            <IconTicket className="event-card-icon event-card-icon--muted" />
+          </span>
           <div className="detail-content">
-            <span className="detail-label">Total Seats</span>
+            <span className="detail-label">Total seats</span>
             <span className="detail-value">{event.totalSeats}</span>
           </div>
         </div>
 
         <div className="detail-item">
-          <span className="detail-icon">💺</span>
+          <span className="detail-icon-wrap" aria-hidden>
+            <IconSeat className="event-card-icon event-card-icon--muted" />
+          </span>
           <div className="detail-content">
             <span className="detail-label">Available</span>
             <span className="detail-value">{event.availableSeats}</span>
@@ -201,39 +168,45 @@ function EventCard({ event, onBook, fallbackImage }) {
         </div>
 
         <div className="detail-item">
-          <span className="detail-icon">📊</span>
+          <span className="detail-icon-wrap" aria-hidden>
+            <IconStatus className="event-card-icon event-card-icon--muted" />
+          </span>
           <div className="detail-content">
             <span className="detail-label">Status</span>
-            <span className={`status-value ${isSoldOut ? 'sold' : isAlmostFull ? 'limited' : 'available'}`}>
-              {isSoldOut ? 'Sold Out' : isAlmostFull ? 'Limited' : 'Available'}
+            <span className={`status-value ${isSoldOut ? "sold" : isAlmostFull ? "limited" : "available"}`}>
+              {isSoldOut ? "Sold out" : isAlmostFull ? "Limited" : "Available"}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Price Section (if you have price in your event object) */}
-      {event.price && (
+      {event.price ? (
         <div className="price-section">
           <span className="price-label">Starting from</span>
           <span className="price-value">${event.price}</span>
         </div>
-      )}
+      ) : null}
 
-      {/* Book Button */}
       <button
-        className={`book-btn ${isSoldOut ? 'disabled' : ''}`}
+        type="button"
+        className={`book-btn ${!canBook ? "disabled" : ""}`}
         onClick={onBook}
-        disabled={isSoldOut}
+        disabled={!canBook}
       >
         {isSoldOut ? (
           <>
-            <span className="btn-icon">❌</span>
-            Sold Out
+            <IconX className="event-card-icon event-card-icon--btn" />
+            Sold out
+          </>
+        ) : isPastEvent ? (
+          <>
+            <IconClock className="event-card-icon event-card-icon--btn" />
+            Event ended
           </>
         ) : (
           <>
-            <span className="btn-icon">🎟️</span>
-            {isAlmostFull ? 'Book Now - Hurry!' : 'Book Ticket'}
+            <IconTicket className="event-card-icon event-card-icon--btn" />
+            {isAlmostFull ? "Book now" : "Book ticket"}
           </>
         )}
       </button>

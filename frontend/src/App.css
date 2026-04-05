@@ -1019,9 +1019,19 @@ span.nav-pill.active {
   background: var(--nav-bg);
 }
 
-.nav-icon {
-  font-size: 1.1rem;
-  opacity: 0.9;
+.service-nav-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: #52525b;
+}
+
+.service-nav-btn.active .service-nav-icon {
+  color: #fafafa;
+}
+
+.service-nav-btn:hover:not(.active) .service-nav-icon {
+  color: #27272a;
 }
 
 .admin-main-panel {
@@ -1183,6 +1193,19 @@ span.nav-pill.active {
   color: var(--text-muted);
 }
 
+.admin-event-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-event-meta-item .event-card-icon {
+  width: 15px;
+  height: 15px;
+  color: #71717a;
+  flex-shrink: 0;
+}
+
 .event-admin-thumb {
   width: 100%;
   max-width: 200px;
@@ -1214,13 +1237,19 @@ span.nav-pill.active {
   font-size: 0.95rem;
 }
 
-.rating .star {
-  color: #d4d4d8;
-  font-size: 0.95rem;
+.rating--svg {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
 }
 
-.rating .star.filled {
+.rating--svg .icon-star--filled {
   color: var(--accent-amber);
+}
+
+.rating--svg .icon-star--empty {
+  color: #d4d4d8;
 }
 
 .event-name {
