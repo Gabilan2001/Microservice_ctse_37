@@ -15,6 +15,13 @@ import {
 } from "../services/bookingService";
 import { deleteReview, getReviews } from "../services/reviewService";
 import { getUsers, updateUser } from "../services/userService";
+import {
+  IconCalendar,
+  IconMapPin,
+  IconStar,
+  IconTicket,
+  IconUsers,
+} from "./EventCardIcons";
 
 function AdminPage({
   currentUser,
@@ -321,10 +328,19 @@ function AdminPage({
                 )}
                 <div className="event-info">
                   <strong>{event.title}</strong>
-                  <div className="event-meta">
-                    <span>📍 {event.location}</span>
-                    <span>📅 {new Date(event.date).toLocaleDateString()}</span>
-                    <span>🎫 {event.availableSeats}/{event.totalSeats} seats</span>
+                  <div className="event-meta admin-event-meta">
+                    <span className="admin-event-meta-item">
+                      <IconMapPin className="event-card-icon" aria-hidden />
+                      {event.location}
+                    </span>
+                    <span className="admin-event-meta-item">
+                      <IconCalendar className="event-card-icon" aria-hidden />
+                      {new Date(event.date).toLocaleDateString()}
+                    </span>
+                    <span className="admin-event-meta-item">
+                      <IconTicket className="event-card-icon" aria-hidden />
+                      {event.availableSeats}/{event.totalSeats} seats
+                    </span>
                   </div>
                 </div>
                 <button className="delete-btn" onClick={() => handleDeleteEvent(event._id)}>
@@ -446,9 +462,9 @@ function AdminPage({
               <div className="review-header">
                 <div className="reviewer-info">
                   <strong>{review.userName}</strong>
-                  <div className="rating">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className={`star ${i < review.rating ? 'filled' : ''}`}>★</span>
+                  <div className="rating rating--svg" aria-label={`${review.rating} out of 5 stars`}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <IconStar key={n} filled={n <= review.rating} />
                     ))}
                   </div>
                 </div>
@@ -611,33 +627,37 @@ function AdminPage({
 
         <section className="admin-layout">
           <aside className="service-sidebar">
-            <button 
-              className={`service-nav-btn ${activeService === "events" ? "active" : ""}`} 
+            <button
+              type="button"
+              className={`service-nav-btn ${activeService === "events" ? "active" : ""}`}
               onClick={() => setActiveService("events")}
             >
-              <span className="nav-icon">📅</span>
+              <IconCalendar className="event-card-icon service-nav-icon" aria-hidden />
               Event Service
             </button>
-            <button 
-              className={`service-nav-btn ${activeService === "bookings" ? "active" : ""}`} 
+            <button
+              type="button"
+              className={`service-nav-btn ${activeService === "bookings" ? "active" : ""}`}
               onClick={() => setActiveService("bookings")}
             >
-              <span className="nav-icon">🎫</span>
+              <IconTicket className="event-card-icon service-nav-icon" aria-hidden />
               Booking Service
             </button>
-            <button 
-              className={`service-nav-btn ${activeService === "reviews" ? "active" : ""}`} 
+            <button
+              type="button"
+              className={`service-nav-btn ${activeService === "reviews" ? "active" : ""}`}
               onClick={() => setActiveService("reviews")}
             >
-              <span className="nav-icon">⭐</span>
+              <IconStar width={18} height={18} className="service-nav-icon" filled={false} aria-hidden />
               User Review Service
             </button>
             {isAdmin && (
-              <button 
-                className={`service-nav-btn ${activeService === "users" ? "active" : ""}`} 
+              <button
+                type="button"
+                className={`service-nav-btn ${activeService === "users" ? "active" : ""}`}
                 onClick={() => setActiveService("users")}
               >
-                <span className="nav-icon">👥</span>
+                <IconUsers className="event-card-icon service-nav-icon" aria-hidden />
                 User Management Service
               </button>
             )}
