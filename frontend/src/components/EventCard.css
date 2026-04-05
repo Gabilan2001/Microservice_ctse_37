@@ -24,8 +24,8 @@
 }
 
 .event-card.almost-full {
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+  border-color: #d97706;
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.15);
 }
 
 /* Image Container */
@@ -177,8 +177,8 @@
 }
 
 .event-seat-pill.open {
-  background: #dbeafe;
-  color: #3b82f6;
+  background: #ecfdf5;
+  color: #15803d;
 }
 
 .event-seat-pill.limited {
@@ -266,7 +266,7 @@
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(90deg, #27272a, #16a34a);
   border-radius: 9999px;
   transition: width 0.5s ease;
 }
@@ -351,7 +351,7 @@
 .price-value {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #3b82f6;
+  color: #0a0a0a;
 }
 
 /* Book Button */
@@ -360,12 +360,12 @@
   padding: 1rem;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: #16a34a;
   color: white;
   font-weight: 600;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -391,7 +391,8 @@
 
 .book-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.5);
+  background: #15803d;
+  box-shadow: 0 10px 24px -6px rgba(22, 163, 74, 0.45);
 }
 
 .book-btn:active:not(:disabled) {
@@ -416,7 +417,7 @@
 }
 
 .event-card:hover .event-title {
-  color: #3b82f6;
+  color: #0a0a0a;
 }
 
 /* Responsive */
@@ -479,37 +480,4 @@
 
 .event-card {
   animation: cardAppear 0.5s ease-out;
-}
-
-/* Dark mode support (optional) */
-@media (prefers-color-scheme: dark) {
-  .event-card {
-    background: #1e293b;
-    border-color: #334155;
-  }
-
-  .event-title {
-    color: #f1f5f9;
-  }
-
-  .event-description {
-    color: #94a3b8;
-  }
-
-  .event-details-grid {
-    background: #0f172a;
-  }
-
-  .detail-value {
-    color: #f1f5f9;
-  }
-
-  .detail-label {
-    color: #64748b;
-  }
-
-  .event-date-pill {
-    background: #334155;
-    color: #e2e8f0;
-  }
 }

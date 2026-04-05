@@ -3,6 +3,7 @@ import EventCard from "./components/EventCard";
 import BookingModal from "./components/BookingModal";
 import BookingList from "./components/BookingList";
 import AdminPage from "./components/AdminPage";
+import AppNavbar from "./components/AppNavbar";
 import AuthPage from "./components/AuthPage";
 import ProfilePage from "./components/ProfilePage";
 import { getBannerImage, getBookings } from "./services/bookingService";
@@ -180,7 +181,14 @@ function App() {
   const canAccessAdminPanel = ["admin", "organizer"].includes(currentUser?.role);
 
   if (!authReady) {
-    return <div className="app"><main className="main-content"><p>Loading session...</p></main></div>;
+    return (
+      <div className="app app-loading">
+        <div className="session-loader">
+          <div className="session-loader-spinner" aria-hidden />
+          <p>Loading session…</p>
+        </div>
+      </div>
+    );
   }
 
   if (!currentUser) {
@@ -191,11 +199,21 @@ function App() {
     return (
       <AdminPage
         currentUser={currentUser}
-        onBack={() => {
-          setPage("home");
-          fetchEvents();
-          fetchBookings();
-          fetchBanner();
+        userMenuRef={userMenuRef}
+        isUserMenuOpen={isUserMenuOpen}
+        setIsUserMenuOpen={setIsUserMenuOpen}
+        onLogout={handleLogout}
+        canAccessAdminPanel={canAccessAdminPanel}
+        onNavigate={(target) => {
+          setIsUserMenuOpen(false);
+          if (target === "home") {
+            setPage("home");
+            fetchEvents();
+            fetchBookings();
+            fetchBanner();
+          } else if (target === "profile") {
+            setPage("profile");
+          }
         }}
       />
     );
@@ -204,19 +222,25 @@ function App() {
   if (page === "profile") {
     return (
       <div className="app">
-        <nav className="navbar">
-          <div className="nav-title-wrap">
-            <h1 className="nav-title">Pulse Events</h1>
-            <p className="nav-subtitle">Creator gatherings, concerts, workshops, and festivals</p>
-          </div>
-          <div className="nav-actions">
-            <button className="back-btn" onClick={() => setPage("home")}>Back to Home</button>
-          </div>
-        </nav>
+        <AppNavbar
+          variant="main"
+          currentUser={currentUser}
+          canAccessAdminPanel={canAccessAdminPanel}
+          activePage="profile"
+          onNavigate={(target) => {
+            setIsUserMenuOpen(false);
+            if (target === "home") setPage("home");
+            else if (target === "profile") setPage("profile");
+            else if (target === "admin" && canAccessAdminPanel) setPage("admin");
+          }}
+          userMenuRef={userMenuRef}
+          isUserMenuOpen={isUserMenuOpen}
+          setIsUserMenuOpen={setIsUserMenuOpen}
+          onLogout={handleLogout}
+        />
 
         <ProfilePage
           currentUser={currentUser}
-          onBack={() => setPage("home")}
           onUserUpdated={(updatedUser) => {
             setCurrentUser(updatedUser);
             saveAuthSession(updatedUser);
@@ -234,52 +258,29 @@ function App() {
   return (
     <div className="app">
 
-      <nav className="navbar">
-        <div className="nav-title-wrap">
-          <h1 className="nav-title">Pulse Events</h1>
-          <p className="nav-subtitle">Creator gatherings, concerts, workshops, and festivals</p>
-        </div>
-        <div className="nav-actions">
-          {canAccessAdminPanel && (
-            <button className="admin-btn" onClick={() => setPage("admin")}>
-              Admin Studio
-            </button>
-          )}
-
-          <div className="user-menu" ref={userMenuRef}>
-            <button
-              className="user-icon-btn"
-              onClick={() => setIsUserMenuOpen((prev) => !prev)}
-            >
-              {currentUser?.name?.charAt(0).toUpperCase() || "U"}
-            </button>
-
-            {isUserMenuOpen && (
-              <div className="user-dropdown">
-                <p className="user-dropdown-name">{currentUser?.name || "-"}</p>
-                <p className="user-dropdown-email">{currentUser?.email || "-"}</p>
-                <p className="user-dropdown-role">Role: {currentUser?.role || "-"}</p>
-                <button className="admin-btn" onClick={() => {
-                  setPage("profile");
-                  setIsUserMenuOpen(false);
-                }}>
-                  Profile
-                </button>
-                <button className="logout-btn" onClick={handleLogout}>
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
+      <AppNavbar
+        variant="main"
+        currentUser={currentUser}
+        canAccessAdminPanel={canAccessAdminPanel}
+        activePage="home"
+        onNavigate={(target) => {
+          setIsUserMenuOpen(false);
+          if (target === "home") setPage("home");
+          else if (target === "profile") setPage("profile");
+          else if (target === "admin" && canAccessAdminPanel) setPage("admin");
+        }}
+        userMenuRef={userMenuRef}
+        isUserMenuOpen={isUserMenuOpen}
+        setIsUserMenuOpen={setIsUserMenuOpen}
+        onLogout={handleLogout}
+      />
 
       <main className="main-content">
 
         <section
           className="hero-banner"
           style={{
-            backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.76), rgba(67, 15, 124, 0.56)), url(${bannerImageUrl || "/image/eventbanner.jpg"})`,
+            backgroundImage: `linear-gradient(105deg, rgba(10, 10, 10, 0.88) 0%, rgba(39, 39, 42, 0.72) 45%, rgba(10, 10, 10, 0.55) 100%), url(${bannerImageUrl || "/image/eventbanner.jpg"})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
