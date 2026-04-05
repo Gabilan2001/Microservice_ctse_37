@@ -441,7 +441,8 @@ import {
 import { deleteReview, getReviews } from "../services/reviewService";
 import { getUsers, updateUser } from "../services/userService";
 
-function AdminPage({ onBack }) {
+function AdminPage({ onBack, currentUser }) {
+  const isAdmin = currentUser?.role === "admin";
   const [activeService, setActiveService] = useState("events");
   const [events, setEvents] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -491,10 +492,12 @@ function AdminPage({ onBack }) {
   useEffect(() => {
     fetchEvents();
     fetchBookings();
-    fetchUsers();
+    if (isAdmin) {
+      fetchUsers();
+    }
     fetchReviews();
     fetchBanner();
-  }, []);
+  }, [isAdmin]);
 
   const handleCreateEvent = async (e) => {
     e.preventDefault();
@@ -1048,20 +1051,22 @@ function AdminPage({ onBack }) {
               <span className="nav-icon">⭐</span>
               User Review Service
             </button>
-            <button 
-              className={`service-nav-btn ${activeService === "users" ? "active" : ""}`} 
-              onClick={() => setActiveService("users")}
-            >
-              <span className="nav-icon">👥</span>
-              User Management Service
-            </button>
+            {isAdmin && (
+              <button 
+                className={`service-nav-btn ${activeService === "users" ? "active" : ""}`} 
+                onClick={() => setActiveService("users")}
+              >
+                <span className="nav-icon">👥</span>
+                User Management Service
+              </button>
+            )}
           </aside>
 
           <section className="admin-main-panel">
             {activeService === "events" && renderEventsSection()}
             {activeService === "bookings" && renderBookingsSection()}
             {activeService === "reviews" && renderReviewsSection()}
-            {activeService === "users" && renderUsersSection()}
+            {isAdmin && activeService === "users" && renderUsersSection()}
           </section>
         </section>
       </main>
