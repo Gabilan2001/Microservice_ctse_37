@@ -603,35 +603,37 @@ function AdminPage({ onBack, currentUser }) {
     alert("User role updated successfully");
   };
 
-  const findUser = (userId) => users.find((user) => user._id === userId);
-  const findEvent = (eventId) => events.find((event) => event._id === eventId);
-  const activeBookings = bookings.filter((booking) => booking.status !== "cancelled").length;
+  const findUser = (userId) => (Array.isArray(users) ? users.find((user) => user._id === userId) : null);
+  const findEvent = (eventId) => (Array.isArray(events) ? events.find((event) => event._id === eventId) : null);
+  const activeBookings = Array.isArray(bookings)
+    ? bookings.filter((booking) => booking.status !== "cancelled").length
+    : 0;
 
-  const filteredEvents = events.filter(event => 
-    event.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredEvents = Array.isArray(events) ? events.filter((event) =>
+    event.title?.toLowerCase().includes(searchTerm.toLowerCase())
+  ) : [];
 
-  const filteredBookings = bookings.filter(booking => {
+  const filteredBookings = Array.isArray(bookings) ? bookings.filter((booking) => {
     const user = findUser(booking.userId);
     const event = findEvent(booking.eventId);
     return (
       user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event?.title?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  });
+  }) : [];
 
-  const filteredReviews = reviews.filter(review => {
+  const filteredReviews = Array.isArray(reviews) ? reviews.filter((review) => {
     const event = findEvent(review.eventId);
     return (
-      review.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      review.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event?.title?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  });
+  }) : [];
 
-  const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = Array.isArray(users) ? users.filter((user) =>
+    user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  ) : [];
 
   const renderEventsSection = () => (
     <div className="service-panel">
