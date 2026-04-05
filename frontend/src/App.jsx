@@ -164,7 +164,7 @@ function App() {
   };
 
   const myBookings = currentUser
-    ? bookings.filter((booking) => booking.userId === (currentUser.id || currentUser._id))
+    ? bookings.filter((booking) => booking.userId === (currentUser?.id || currentUser?._id))
     : [];
 
   const showcaseImages = [
@@ -177,7 +177,7 @@ function App() {
 
   const soldOutCount = events.filter((event) => event.availableSeats === 0).length;
   const totalOpenSeats = events.reduce((sum, event) => sum + Number(event.availableSeats || 0), 0);
-  const canAccessAdminPanel = ["admin", "organizer"].includes(currentUser.role);
+  const canAccessAdminPanel = ["admin", "organizer"].includes(currentUser?.role);
 
   if (!authReady) {
     return <div className="app"><main className="main-content"><p>Loading session...</p></main></div>;
@@ -251,14 +251,14 @@ function App() {
               className="user-icon-btn"
               onClick={() => setIsUserMenuOpen((prev) => !prev)}
             >
-              {currentUser.name?.charAt(0).toUpperCase() || "U"}
+              {currentUser?.name?.charAt(0).toUpperCase() || "U"}
             </button>
 
             {isUserMenuOpen && (
               <div className="user-dropdown">
-                <p className="user-dropdown-name">{currentUser.name}</p>
-                <p className="user-dropdown-email">{currentUser.email}</p>
-                <p className="user-dropdown-role">Role: {currentUser.role}</p>
+                <p className="user-dropdown-name">{currentUser?.name || "-"}</p>
+                <p className="user-dropdown-email">{currentUser?.email || "-"}</p>
+                <p className="user-dropdown-role">Role: {currentUser?.role || "-"}</p>
                 <button className="admin-btn" onClick={() => {
                   setPage("profile");
                   setIsUserMenuOpen(false);
