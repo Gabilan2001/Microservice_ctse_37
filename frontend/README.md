@@ -1,3 +1,39 @@
+# Frontend Deployment Notes (Vercel)
+
+This frontend is pre-configured for Vercel deployment.
+
+## How API URLs work
+
+- In production, if no explicit API env vars are set, frontend calls relative paths:
+	- `/api/auth`
+	- `/api/events`
+	- `/api/bookings`
+	- `/api/reviews`
+- `vercel.json` rewrites those paths to your deployed backend services.
+- In local development, direct localhost URLs are used by default.
+
+## Deploy to Vercel
+
+1. Import the `frontend` folder as a Vercel project.
+2. Framework preset: `Create React App`.
+3. Build command: `npm run build`.
+4. Output directory: `build`.
+5. Deploy.
+
+## Optional environment variables
+
+You can override defaults with:
+
+- `REACT_APP_API_BASE_URL` (single base for all APIs, example: `https://api.example.com/api` or `/api`)
+- `REACT_APP_API_GATEWAY_URL` (example: `https://api.example.com`)
+- `REACT_APP_API_PROXY_BASE` (example: `/api`)
+- `REACT_APP_AUTH_API_URL`
+- `REACT_APP_EVENT_API_URL`
+- `REACT_APP_BOOKING_API_URL`
+- `REACT_APP_REVIEW_API_URL`
+
+Priority order: `REACT_APP_API_BASE_URL` -> `REACT_APP_API_GATEWAY_URL` -> `REACT_APP_API_PROXY_BASE` -> defaults.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

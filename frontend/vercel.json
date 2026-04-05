@@ -1,0 +1,24 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/events/:path*",
+      "destination": "http://13.204.88.152:3002/api/events/:path*"
+    },
+    {
+      "source": "/api/auth/:path*",
+      "destination": "http://65.2.63.142:3001/api/auth/:path*"
+    },
+    {
+      "source": "/api/bookings/:path*",
+      "destination": "http://13.204.88.152:3003/api/bookings/:path*"
+    },
+    {
+      "source": "/api/reviews/:path*",
+      "destination": "http://13.204.88.152:3004/api/reviews/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
