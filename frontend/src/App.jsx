@@ -177,6 +177,7 @@ function App() {
 
   const soldOutCount = events.filter((event) => event.availableSeats === 0).length;
   const totalOpenSeats = events.reduce((sum, event) => sum + Number(event.availableSeats || 0), 0);
+  const canAccessAdminPanel = ["admin", "organizer"].includes(currentUser.role);
 
   if (!authReady) {
     return <div className="app"><main className="main-content"><p>Loading session...</p></main></div>;
@@ -186,7 +187,7 @@ function App() {
     return <AuthPage onAuthenticated={handleAuthenticated} />;
   }
 
-  if (page === "admin" && currentUser.role === "admin") {
+  if (page === "admin" && canAccessAdminPanel) {
     return (
       <AdminPage
         currentUser={currentUser}
@@ -239,7 +240,7 @@ function App() {
           <p className="nav-subtitle">Creator gatherings, concerts, workshops, and festivals</p>
         </div>
         <div className="nav-actions">
-          {currentUser.role === "admin" && (
+          {canAccessAdminPanel && (
             <button className="admin-btn" onClick={() => setPage("admin")}>
               Admin Studio
             </button>
