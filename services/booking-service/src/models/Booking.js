@@ -39,7 +39,8 @@ default:[]
 
 status:{
 type:String,
-default:"BOOKED"
+enum:["pending","confirmed","cancelled","BOOKED"],
+default:"pending"
 },
 
 createdAt:{

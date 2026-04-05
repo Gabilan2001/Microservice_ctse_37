@@ -32,6 +32,18 @@ export const deleteBooking = async (id) => {
   });
 };
 
+export const confirmBooking = async (id) => {
+  return await axios.patch(
+    `${API_URL}/${id}/status`,
+    { status: "confirmed" },
+    {
+      headers: {
+        ...getAuthHeaders(),
+      },
+    }
+  );
+};
+
 export const uploadBannerImage = async (file) => {
   const formData = new FormData();
   formData.append("image", file);
