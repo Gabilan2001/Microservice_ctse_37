@@ -212,12 +212,13 @@ function EventReviews({ events, currentUser }) {
   };
 
   const getAverageRating = () => {
-    if (reviews.length === 0) return 0;
+    if (!Array.isArray(reviews) || reviews.length === 0) return 0;
     const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
     return (sum / reviews.length).toFixed(1);
   };
 
   const getRatingDistribution = () => {
+    if (!Array.isArray(reviews) || reviews.length === 0) return [0, 0, 0, 0, 0];
     const distribution = [0, 0, 0, 0, 0];
     reviews.forEach(review => {
       distribution[5 - review.rating]++;
@@ -226,6 +227,10 @@ function EventReviews({ events, currentUser }) {
   };
 
   const getFilteredAndSortedReviews = () => {
+    if (!Array.isArray(reviews) || reviews.length === 0) {
+      return [];
+    }
+
     let filtered = [...reviews];
     
     // Filter by rating

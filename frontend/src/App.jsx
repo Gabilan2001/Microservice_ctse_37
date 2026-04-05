@@ -4,7 +4,6 @@ import BookingModal from "./components/BookingModal";
 import BookingList from "./components/BookingList";
 import AdminPage from "./components/AdminPage";
 import AuthPage from "./components/AuthPage";
-import EventReviews from "./components/EventReviews";
 import ProfilePage from "./components/ProfilePage";
 import { getBannerImage, getBookings } from "./services/bookingService";
 import { getEvents } from "./services/eventService";
@@ -398,9 +397,9 @@ function App() {
           <BookingList bookings={myBookings} refreshBookings={fetchBookings} />
         </section>
 
-        <section className="content-section">
+        {/* <section className="content-section">
           <EventReviews events={events} currentUser={currentUser} />
-        </section>
+        </section> */}
 
       </main>
 
