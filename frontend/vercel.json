@@ -13,10 +13,6 @@
       "destination": "http://13.204.88.152:3003/api/bookings/:path*"
     },
     {
-      "source": "/api/reviews/:path*",
-      "destination": "http://13.204.88.152:3004/api/reviews/:path*"
-    },
-    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
