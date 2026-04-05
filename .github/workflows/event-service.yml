@@ -66,3 +66,14 @@ jobs:
           tags: |
             ${{ secrets.EVENT_DOCKERHUB_USERNAME }}/event-service:latest
             ${{ secrets.EVENT_DOCKERHUB_USERNAME }}/event-service:${{ github.sha }}
+
+      - name: Deploy to AWS ECS
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_EVENT_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_EVENT_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          aws ecs update-service \
+            --cluster event-service-cluster \
+            --service event-service \
+            --force-new-deployment \
