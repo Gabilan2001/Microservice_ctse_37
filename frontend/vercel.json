@@ -13,6 +13,10 @@
       "destination": "http://54.254.159.66:8081/api/bookings/:path*"
     },
     {
+      "source": "/api/reviews/:path*",
+      "destination": "http://54.169.171.13:3004/api/reviews/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
