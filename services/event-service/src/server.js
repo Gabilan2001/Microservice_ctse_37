@@ -13,6 +13,11 @@ connectDB()
 app.use(cors())
 app.use(express.json())
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "Event Service is healthy", timestamp: new Date() })
+})
+
 app.use("/api/events", eventRoutes)
 
 const PORT = process.env.PORT || 3002
