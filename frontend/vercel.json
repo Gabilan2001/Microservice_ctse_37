@@ -10,7 +10,7 @@
     },
     {
       "source": "/api/bookings/:path*",
-      "destination": "http://13.204.88.152:3003/api/bookings/:path*"
+      "destination": "http://13.214.163.138:8081/api/bookings/:path*"
     },
     {
       "source": "/(.*)",
