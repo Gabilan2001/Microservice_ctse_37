@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AppNavbar from "./AppNavbar";
 import { loginUser, registerUser } from "../services/userService";
 import { saveAuthSession } from "../services/authStorage";
 
@@ -42,73 +43,82 @@ function AuthPage({ onAuthenticated }) {
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-shell">
-        <aside className="auth-showcase">
-          <p className="auth-tag">Event Booking Platform</p>
-          <h1>Plan, reserve, and manage every event professionally</h1>
-          <p>
-            Secure authentication with role based access for customers and admin
-            operations.
-          </p>
-          <img src={authVisual} alt="Upcoming events" />
-        </aside>
+    <div className="app auth-app">
+      <AppNavbar variant="public" />
 
-        <section className="auth-card">
-          <h2>{mode === "login" ? "Welcome back" : "Create account"}</h2>
-          <p>{mode === "login" ? "Login to continue" : "Create a new account"}</p>
+      <div className="auth-wrapper">
+        <div className="auth-shell">
+          <aside className="auth-showcase">
+            <p className="auth-tag">Event Booking Platform</p>
+            <h1>Plan, reserve, and manage every event professionally</h1>
+            <p>
+              Secure authentication with role based access for customers and admin
+              operations.
+            </p>
+            <img src={authVisual} alt="Upcoming events" />
+          </aside>
 
-          <form className="auth-form" onSubmit={handleSubmit}>
-            {mode === "register" && (
-              <>
-                <label>Name</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
+          <section className="auth-card">
+            <h2>{mode === "login" ? "Welcome back" : "Create account"}</h2>
+            <p>{mode === "login" ? "Login to continue" : "Create a new account"}</p>
 
-                <label>Role</label>
-                <select value={role} onChange={(e) => setRole(e.target.value)} required>
-                  <option value="attendee">Attendee</option>
-                  <option value="organizer">Organizer</option>
-                </select>
-              </>
-            )}
+            <form className="auth-form" onSubmit={handleSubmit}>
+              {mode === "register" && (
+                <>
+                  <label>Name</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
 
-            <label>Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+                  <label>Role</label>
+                  <select value={role} onChange={(e) => setRole(e.target.value)} required>
+                    <option value="attendee">Attendee</option>
+                    <option value="organizer">Organizer</option>
+                  </select>
+                </>
+              )}
 
-            <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+              <label>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
 
-            <button type="submit" className="submit-btn" disabled={loading}>
-              {loading ? "Please wait..." : mode === "login" ? "Login" : "Register"}
+              <label>Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+
+              <button type="submit" className="submit-btn" disabled={loading}>
+                {loading ? "Please wait..." : mode === "login" ? "Login" : "Register"}
+              </button>
+            </form>
+
+            <button
+              className="mode-btn"
+              onClick={() => {
+                setMode(mode === "login" ? "register" : "login");
+                resetForm();
+              }}
+            >
+              {mode === "login" ? "No account? Register" : "Already have an account? Login"}
             </button>
-          </form>
-
-          <button
-            className="mode-btn"
-            onClick={() => {
-              setMode(mode === "login" ? "register" : "login");
-              resetForm();
-            }}
-          >
-            {mode === "login" ? "No account? Register" : "Already have an account? Login"}
-          </button>
-        </section>
+          </section>
+        </div>
       </div>
+
+      <footer className="site-footer">
+        <p>Pulse Events</p>
+        <p>{new Date().getFullYear()} · Professional event booking</p>
+      </footer>
     </div>
   );
 }

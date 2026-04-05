@@ -1,39 +1,43 @@
 .profile-page-wrap {
-  width: min(900px, 100%);
+  width: min(720px, 100%);
 }
 
 .profile-page-shell {
-  margin-top: 10px;
-}
-
-.profile-back-btn {
-  color: #1f1247;
-  border-color: rgba(31, 18, 71, 0.22);
+  margin-top: 8px;
 }
 
 .profile-form {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .profile-form label {
   font-weight: 600;
-  color: #2a1458;
+  color: #0a0a0a;
+  font-size: 0.82rem;
 }
 
 .profile-form input,
 .profile-form textarea {
   width: 100%;
-  border: 1px solid rgba(97, 79, 146, 0.26);
+  border: 1px solid #e4e4e7;
   border-radius: 10px;
   padding: 10px 12px;
   font: inherit;
   background: #fff;
+  color: #0a0a0a;
+}
+
+.profile-form input:focus,
+.profile-form textarea:focus {
+  outline: none;
+  border-color: #a1a1aa;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
 }
 
 .profile-form-actions {
-  margin-top: 8px;
+  margin-top: 12px;
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }

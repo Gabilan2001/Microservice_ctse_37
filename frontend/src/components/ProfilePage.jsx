@@ -3,7 +3,7 @@ import { deleteMyProfile, updateMyProfile } from "../services/userService";
 import { clearAuthSession, saveAuthSession } from "../services/authStorage";
 import "./ProfilePage.css";
 
-function ProfilePage({ currentUser, onBack, onUserUpdated, onDeleted }) {
+function ProfilePage({ currentUser, onUserUpdated, onDeleted }) {
   const [name, setName] = useState(currentUser?.name || "");
   const [email, setEmail] = useState(currentUser?.email || "");
   const [bio, setBio] = useState(currentUser?.bio || "");
@@ -77,10 +77,9 @@ function ProfilePage({ currentUser, onBack, onUserUpdated, onDeleted }) {
       <section className="content-section profile-page-shell">
         <div className="section-heading-row">
           <div>
-            <h2 className="section-title">Edit Profile</h2>
+            <h2 className="section-title">Profile</h2>
             <p className="section-subtitle">{roleLabel}</p>
           </div>
-          <button className="back-btn profile-back-btn" onClick={onBack}>Back</button>
         </div>
 
         <form className="profile-form" onSubmit={handleSave}>
