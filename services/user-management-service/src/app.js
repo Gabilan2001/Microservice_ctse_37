@@ -9,7 +9,13 @@ const swaggerSpec = require("./config/swagger");
 
 const app = express();
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: false,
+  })
+);
 app.use(cors());
 app.use(express.json());
 
