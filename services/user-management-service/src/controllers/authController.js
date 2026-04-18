@@ -133,7 +133,7 @@ const loginUser = async (req, res) => {
     });
   }
 };
-
+//get profile
 const getProfile = async (req, res) => {
   try {
     return res.status(200).json({
