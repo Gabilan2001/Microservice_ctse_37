@@ -6,7 +6,7 @@
     },
     {
       "source": "/api/auth/:path*",
-      "destination": "http://65.2.63.142:3001/api/auth/:path*"
+      "destination": "http://15.207.106.76:3001/api/auth/:path*"
     },
     {
       "source": "/api/bookings/:path*",
