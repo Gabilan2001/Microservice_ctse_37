@@ -2,8 +2,10 @@ require("dotenv").config()
 
 const express = require("express")
 const cors = require("cors")
+const swaggerUi = require("swagger-ui-express")
 
 const connectDB = require("./config/db")
+const swaggerSpec = require("./config/swagger")
 const bookingRoutes = require("./routes/bookingRoutes")
 
 const app = express()
@@ -17,6 +19,12 @@ app.use(express.json())
 
 app.get("/health", (req, res) => {
   res.json({ success: true, message: "Booking service is running!" })
+})
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+
+app.get("/api-docs.json", (_req, res) => {
+  res.json(swaggerSpec)
 })
 
 
