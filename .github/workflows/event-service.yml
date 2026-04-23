@@ -77,5 +77,6 @@ jobs:
         run: |
           aws ecs update-service \
             --cluster event-service-cluster \
-            --service event-service \
-            --force-new-deployment
+            --service ctse-event-service-prod \
+            --force-new-deployment \
+            --region eu-north-1
