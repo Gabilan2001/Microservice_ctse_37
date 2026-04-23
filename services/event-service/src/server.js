@@ -28,6 +28,6 @@ app.use("/api/events", eventRoutes)
 const PORT = process.env.PORT || 3002
 
 app.listen(PORT, () => {
-  console.log(`Event Service running on port ${PORT}`)
+  console.log(`Event Service running on port is ${PORT}`)
   console.log(`Open your browser and navigate to: http://localhost:${PORT}/api-docs`)
 })
