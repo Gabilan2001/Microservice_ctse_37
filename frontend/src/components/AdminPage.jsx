@@ -223,14 +223,34 @@ function AdminPage({
     event.title?.toLowerCase().includes(searchTerm.toLowerCase())
   ) : [];
 
-  const filteredBookings = Array.isArray(bookings) ? bookings.filter((booking) => {
-    const user = findUser(booking.userId);
-    const event = findEvent(booking.eventId);
-    return (
-      user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event?.title?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }) : [];
+  const filteredBookings = Array.isArray(bookings)
+    ? bookings.filter((booking) => {
+        const query = searchTerm.trim().toLowerCase();
+
+        if (!query) {
+          return true;
+        }
+
+        const user = findUser(booking.userId);
+        const event = findEvent(booking.eventId);
+
+        const searchableValues = [
+          user?.name,
+          user?.email,
+          user?.role,
+          booking.userName,
+          booking.userEmail,
+          booking.userRole,
+          event?.title,
+          booking.eventId,
+          booking.status
+        ];
+
+        return searchableValues.some((value) =>
+          String(value || "").toLowerCase().includes(query)
+        );
+      })
+    : [];
 
   const filteredReviews = Array.isArray(reviews) ? reviews.filter((review) => {
     const event = findEvent(review.eventId);
@@ -378,7 +398,7 @@ function AdminPage({
     <div className="service-panel">
       <div className="service-header-row">
         <h2>Booking Management</h2>
-        <span className="badge">{bookings.length} Total Bookings</span>
+        <span className="badge">{filteredBookings.length} Total Bookings</span>
       </div>
       
       <div className="bookings-section">
@@ -426,18 +446,21 @@ function AdminPage({
                 const user = findUser(booking.userId);
                 const event = findEvent(booking.eventId);
                 const bookingStatus = normalizeBookingStatus(booking.status);
+                const displayName = booking.userName || user?.name || "Unknown";
+                const displayEmail = booking.userEmail || user?.email || "-";
+                const displayRole = booking.userRole || user?.role || "-";
 
                 return (
                   <tr key={booking._id}>
                     <td>
                       <div className="user-info">
-                        <span className="user-name">{user?.name || "Unknown"}</span>
+                        <span className="user-name">{displayName}</span>
                       </div>
                     </td>
-                    <td>{user?.email || "-"}</td>
+                    <td>{displayEmail}</td>
                     <td>
-                      <span className={`role-badge ${user?.role}`}>
-                        {user?.role || "-"}
+                      <span className={`role-badge ${displayRole}`}>
+                        {displayRole}
                       </span>
                     </td>
                     <td>{event?.title || "Unknown Event"}</td>
