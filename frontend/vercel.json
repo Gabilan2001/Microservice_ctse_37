@@ -10,7 +10,7 @@
     },
     {
       "source": "/api/bookings/:path*",
-      "destination": "http://13.212.78.72:8081/api/bookings/:path*"
+      "destination": "http://54.251.181.134:8081/api/bookings/:path*"
     },
     {
       "source": "/api/reviews/:path*",
