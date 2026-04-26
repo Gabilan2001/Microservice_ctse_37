@@ -14,7 +14,7 @@
     },
     {
       "source": "/api/reviews/:path*",
-      "destination": "http://13.229.64.213:3004/api/reviews/:path*"
+      "destination": "http://54.169.252.36:3004/api/reviews/:path*"
     },
     {
       "source": "/(.*)",
