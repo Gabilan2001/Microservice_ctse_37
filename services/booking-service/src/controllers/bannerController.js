@@ -1,20 +1,20 @@
 const SiteAsset = require("../models/SiteAsset")
 const cloudinary = require("../config/cloudinary")
 
-const uploadToCloudinary = (buffer, folder) => {
-  return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream({ folder }, (error, result) => {
-      if (error) {
-        reject(error)
-        return
-      }
+// const uploadToCloudinary = (buffer, folder) => {
+//   return new Promise((resolve, reject) => {
+//     const stream = cloudinary.uploader.upload_stream({ folder }, (error, result) => {
+//       if (error) {
+//         reject(error)
+//         return
+//       }
 
-      resolve(result)
-    })
+//       resolve(result)
+//     })
 
-    stream.end(buffer)
-  })
-}
+//     stream.end(buffer)
+//   })
+// }
 
 exports.uploadBannerImage = async (req, res) => {
   try {
