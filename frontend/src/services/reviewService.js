@@ -5,7 +5,22 @@ import { getAuthHeaders } from "./authStorage";
 const API_URL = reviewApiUrl;
 
 export const getReviews = async (eventId) => {
-  return await axios.get(API_URL, { params: { eventId } });
+  const params = {
+    _t: Date.now(),
+  };
+
+  if (eventId) {
+    params.eventId = eventId;
+  }
+
+  return await axios.get(API_URL, {
+    params,
+    headers: {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      Pragma: "no-cache",
+      Expires: "0",
+    },
+  });
 };
 
 export const createReview = async (reviewData) => {
