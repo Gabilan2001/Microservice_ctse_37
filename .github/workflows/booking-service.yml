@@ -35,6 +35,15 @@ jobs:
       - name: Install booking-service dependencies
         run: npm ci --prefix services/booking-service
 
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --file=services/booking-service/package.json
+          command: test
+
       - name: Build booking-service Docker image
         run: docker build -t booking-service:ci ./services/booking-service
 
